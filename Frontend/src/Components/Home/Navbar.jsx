@@ -1,35 +1,82 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+
+  const isActive = isScrolled || isHovered;
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const navLinks = [
+    { name: "HOME", path: "/" },
+    { name: "ABOUT", path: "/about" },
+    { name: "SHOP", path: "/shop" },
+    { name: "PROJECTS", path: "/projects" },
+    { name: "CONTACT", path: "/contact" },
+    { name: "CUSTOM ORDER", path: "/custom-order" },
+    { name: "ACCOUNT", path: "/account" },
+    { name: "SEARCH", path: "/search" },
+  ];
+
   return (
-    <nav className={`fixed w-full z-10 transition-colors duration-300 ${isScrolled ? 'bg-white' : 'bg-transparent'}`}>
+    <nav
+      className={`fixed w-full z-50 transition-colors duration-300 ${
+        isActive ? "bg-white" : "bg-transparent"
+      }`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-        <div className="text-white font-bold text-xl">BLACK BADGE</div>
-        <div className="flex space-x-6 text-white">
-          <a href="#" className="hover:text-gray-300">HOME</a>
-          <a href="#" className="hover:text-gray-300">ABOUT</a>
-          <a href="#" className="hover:text-gray-300">SHOP</a>
-          <a href="#" className="hover:text-gray-300">PROJECTS</a>
-          <a href="#" className="hover:text-gray-300">CONTACT</a>
-          <a href="#" className="hover:text-gray-300">CUSTOM ORDER</a>
-          <a href="#" className="hover:text-gray-300">COMMERCIAL</a>
-          <a href="#" className="hover:text-gray-300">ACCOUNT</a>
-          <a href="#" className="hover:text-gray-300">SEARCH</a>
+        {/* Logo */}
+        <div
+          className={`font-bold text-xl ${
+            isActive ? "text-black" : "text-white"
+          }`}
+        >
+          BLACK BADGE
         </div>
-        <button className="rounded-full px-3 py-2 bg-black text-white hover:bg-white hover:text-black">Add  a Qoute</button>
+
+        {/* Links */}
+        <div
+          className={`flex space-x-6 ${isActive ? "text-black" : "text-white"}`}
+        >
+          {navLinks.map((link, index) => (
+            <Link
+              key={index}
+              to={link.path}
+              className="hover:text-gray-500 transition-colors duration-200"
+            >
+              {link.name}
+            </Link>
+          ))}
+        </div>
+
+        {/* Button */}
+        <button
+          className={`rounded-full px-3 py-2 border transition-colors duration-200 ${
+            isActive
+              ? "bg-black text-white hover:bg-white hover:text-black border-black"
+              : "bg-white text-black hover:bg-black hover:text-white border-white"
+          }`}
+        >
+          Add a Quote
+        </button>
       </div>
     </nav>
   );
 };
 
 export default Navbar;
+
+
+
+
+
